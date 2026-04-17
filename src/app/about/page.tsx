@@ -1,0 +1,35 @@
+export default function AboutPage() {
+  return (
+    <div>
+      <h1 className="text-3xl font-bold mb-8">关于</h1>
+
+      <div className="prose max-w-none">
+        <p className="text-lg text-gray-600 mb-6">
+          这是一个记录我学习 AI Agent 过程的博客。
+        </p>
+
+        <h2 className="text-2xl font-bold mt-8 mb-4">本博客涵盖的内容</h2>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Agent 架构与设计模式</li>
+          <li>ReAct、CoT、ToT 等推理技术</li>
+          <li>工具使用与函数调用</li>
+          <li>多 Agent 协作系统</li>
+          <li>实际项目实践与踩坑记录</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold mt-8 mb-4">技术栈</h2>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Next.js 14 - 博客框架</li>
+          <li>Markdown - 文章格式</li>
+          <li>Umami - 开源分析</li>
+          <li>Giscus - 基于 GitHub Discussions 的评论</li>
+        </ul>
+
+        <h2 className="text-2xl font-bold mt-8 mb-4">联系我</h2>
+        <p>
+          有问题或建议？欢迎在文章下方留言，或通过 GitHub 联系我。
+        </p>
+      </div>
+    </div>
+  );
+}
