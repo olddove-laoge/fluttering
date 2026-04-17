@@ -8,8 +8,8 @@ export default function TagsPage() {
   const posts = getAllPosts();
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8">标签</h1>
+    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-8">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800">标签</h1>
 
       {/* 标签云 */}
       <div className="flex flex-wrap gap-3 mb-12">
@@ -17,7 +17,7 @@ export default function TagsPage() {
           <Link
             key={tag}
             href={`/tags/${encodeURIComponent(tag)}`}
-            className="px-4 py-2 rounded-full text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+            className="px-4 py-2 rounded-full text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
           >
             {tag}
           </Link>
@@ -26,14 +26,14 @@ export default function TagsPage() {
 
       {/* 所有文章列表 */}
       <div className="space-y-6">
-        <h2 className="text-xl font-semibold mb-4">所有文章</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">所有文章</h2>
         {posts.map((post) => (
           <article
             key={post.slug}
-            className="border-b pb-6 last:border-0"
+            className="border-b border-gray-200 pb-6 last:border-0"
           >
             <Link href={`/posts/${post.slug}`}>
-              <h3 className="text-xl font-bold mb-2 hover:text-primary-600">
+              <h3 className="text-xl font-bold mb-2 text-gray-800 hover:text-blue-600 transition-colors">
                 {post.title}
               </h3>
             </Link>
@@ -49,7 +49,7 @@ export default function TagsPage() {
                 <Link
                   key={tag}
                   href={`/tags/${encodeURIComponent(tag)}`}
-                  className="text-xs text-primary-600 hover:underline"
+                  className="text-xs text-blue-600 hover:underline"
                 >
                   #{tag}
                 </Link>

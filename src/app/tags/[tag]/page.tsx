@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const tag = decodeURIComponent(params.tag);
   return {
-    title: `标签: ${tag} | Agent Learning`,
+    title: `标签: ${tag} | 振翅`,
   };
 }
 
@@ -32,14 +32,14 @@ export default function TagPage({ params }: Props) {
   }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8">标签</h1>
+    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-8">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800">标签</h1>
 
       {/* 标签云 */}
       <div className="flex flex-wrap gap-3 mb-12">
         <Link
           href="/tags"
-          className="px-4 py-2 rounded-full text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+          className="px-4 py-2 rounded-full text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
         >
           全部
         </Link>
@@ -49,8 +49,8 @@ export default function TagPage({ params }: Props) {
             href={`/tags/${encodeURIComponent(t)}`}
             className={`px-4 py-2 rounded-full text-sm transition-colors ${
               t === tag
-                ? 'bg-primary-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-blue-600 text-white'
+                : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
             }`}
           >
             {t}
@@ -60,7 +60,7 @@ export default function TagPage({ params }: Props) {
 
       {/* 该标签的文章列表 */}
       <div className="space-y-6">
-        <h2 className="text-xl font-semibold mb-4">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">
           「{tag}」标签的文章
         </h2>
         {posts.length === 0 ? (
@@ -69,10 +69,10 @@ export default function TagPage({ params }: Props) {
           posts.map((post) => (
             <article
               key={post.slug}
-              className="border-b pb-6 last:border-0"
+              className="border-b border-gray-200 pb-6 last:border-0"
             >
               <Link href={`/posts/${post.slug}`}>
-                <h3 className="text-xl font-bold mb-2 hover:text-primary-600">
+                <h3 className="text-xl font-bold mb-2 text-gray-800 hover:text-blue-600 transition-colors">
                   {post.title}
                 </h3>
               </Link>
@@ -89,7 +89,7 @@ export default function TagPage({ params }: Props) {
                     key={t}
                     href={`/tags/${encodeURIComponent(t)}`}
                     className={`text-xs hover:underline ${
-                      t === tag ? 'text-primary-600 font-medium' : 'text-primary-600'
+                      t === tag ? 'text-blue-700 font-medium' : 'text-blue-600'
                     }`}
                   >
                     #{t}

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props) {
   if (!post) return { title: 'Not Found' };
 
   return {
-    title: `${post.title} | Agent Learning`,
+    title: `${post.title} | 振翅`,
   };
 }
 
@@ -33,37 +33,39 @@ export default async function PostPage({ params }: Props) {
   }
 
   return (
-    <article>
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-        <div className="flex items-center gap-4 text-gray-500">
-          <time dateTime={post.date}>
-            {format(new Date(post.date), 'yyyy年MM月dd日', { locale: zhCN })}
-          </time>
-          <span>·</span>
-          <span>{post.readingTime} 分钟阅读</span>
-        </div>
-        <div className="flex flex-wrap gap-2 mt-4">
-          {post.tags.map((tag) => (
-            <Link
-              key={tag}
-              href={`/tags?tag=${encodeURIComponent(tag)}`}
-              className="px-3 py-1 bg-primary-50 text-primary-700 rounded-full text-sm hover:bg-primary-100"
-            >
-              {tag}
-            </Link>
-          ))}
-        </div>
-      </header>
+    <div className="bg-white/95 backdrop-blur-sm rounded-lg p-8">
+      <article>
+        <header className="mb-8">
+          <h1 className="text-4xl font-bold mb-4 text-gray-800">{post.title}</h1>
+          <div className="flex items-center gap-4 text-gray-500">
+            <time dateTime={post.date}>
+              {format(new Date(post.date), 'yyyy年MM月dd日', { locale: zhCN })}
+            </time>
+            <span>·</span>
+            <span>{post.readingTime} 分钟阅读</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-4">
+            {post.tags.map((tag) => (
+              <Link
+                key={tag}
+                href={`/tags/${encodeURIComponent(tag)}`}
+                className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm hover:bg-blue-100 transition-colors"
+              >
+                {tag}
+              </Link>
+            ))}
+          </div>
+        </header>
 
-      <div
-        className="prose max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+        <div
+          className="prose max-w-none text-gray-700"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
 
-      <div className="mt-16 pt-8 border-t">
-        <Giscus />
-      </div>
-    </article>
+        <div className="mt-16 pt-8 border-t border-gray-200">
+          <Giscus />
+        </div>
+      </article>
+    </div>
   );
 }
