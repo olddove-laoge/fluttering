@@ -13,11 +13,11 @@ export default function Giscus() {
     script.async = true;
     script.crossOrigin = 'anonymous';
 
-    // Giscus 配置 - 请根据你的仓库修改
-    script.setAttribute('data-repo', 'YOUR_USERNAME/YOUR_REPO');
-    script.setAttribute('data-repo-id', 'YOUR_REPO_ID');
+    // Giscus 配置
+    script.setAttribute('data-repo', 'olddove-laoge/fluttering');
+    script.setAttribute('data-repo-id', 'R_kgDOSFVX6Q');
     script.setAttribute('data-category', 'Announcements');
-    script.setAttribute('data-category-id', 'YOUR_CATEGORY_ID');
+    script.setAttribute('data-category-id', 'DIC_kwDOSFVX6c4C7E6w');
     script.setAttribute('data-mapping', 'pathname');
     script.setAttribute('data-strict', '0');
     script.setAttribute('data-reactions-enabled', '1');
