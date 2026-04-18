@@ -9,10 +9,9 @@ interface BackgroundCarouselProps {
 
 export default function BackgroundCarousel({
   images,
-  interval = 5000,
+  interval = 15000,
 }: BackgroundCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoaded, setIsLoaded] = useState<boolean[]>(new Array(images.length).fill(false));
 
   useEffect(() => {
     if (images.length <= 1) return;
@@ -23,14 +22,6 @@ export default function BackgroundCarousel({
 
     return () => clearInterval(timer);
   }, [images.length, interval]);
-
-  const handleImageLoad = (index: number) => {
-    setIsLoaded((prev) => {
-      const newLoaded = [...prev];
-      newLoaded[index] = true;
-      return newLoaded;
-    });
-  };
 
   if (images.length === 0) return null;
 
@@ -47,11 +38,6 @@ export default function BackgroundCarousel({
             src={src}
             alt=""
             className="w-full h-full object-cover"
-            onLoad={() => handleImageLoad(index)}
-            style={{
-              opacity: isLoaded[index] ? 1 : 0,
-              transition: 'opacity 0.5s ease-in-out',
-            }}
           />
         </div>
       ))}
