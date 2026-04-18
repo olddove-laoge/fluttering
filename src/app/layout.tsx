@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import BackgroundCarousel from '@/components/BackgroundCarousel';
+import ConstellationTrail from '@/components/ConstellationTrail';
 import { getBackgroundImages } from '@/lib/bg-images';
 
 export const metadata: Metadata = {
@@ -22,6 +23,9 @@ export default async function RootLayout({
         <script defer src="https://cloud.umami.is/script.js" data-website-id="27056cda-05fb-4479-98d6-7dfb9f076ed1" />
       </head>
       <body className="text-gray-900 min-h-screen">
+        {/* 星座拖尾效果 */}
+        <ConstellationTrail />
+
         {/* 背景图片轮播 - 自动扫描 public/bg 目录 */}
         <BackgroundCarousel
           images={images}
