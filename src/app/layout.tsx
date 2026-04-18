@@ -25,7 +25,7 @@ export default async function RootLayout({
         {/* 背景图片轮播 - 自动扫描 public/bg 目录 */}
         <BackgroundCarousel
           images={images}
-          interval={8000}
+          interval={10000}
         />
 
         <div className="min-h-screen bg-black/30">
