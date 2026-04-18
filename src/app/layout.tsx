@@ -1,32 +1,33 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import BackgroundCarousel from '@/components/BackgroundCarousel';
+import { getBackgroundImages } from '@/lib/bg-images';
 
 export const metadata: Metadata = {
   title: '振翅',
   description: '记录学习 Agent 过程的博客',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const images = getBackgroundImages();
+
   return (
     <html lang="zh-CN">
       <head>
         {/* Umami 分析脚本 */}
         <script defer src="https://cloud.umami.is/script.js" data-website-id="27056cda-05fb-4479-98d6-7dfb9f076ed1" />
       </head>
-      <body
-        className="text-gray-900 min-h-screen"
-        style={{
-          backgroundImage: 'url(/images/bg.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-        }}
-      >
-        {/* 半透明遮罩层，让文字更清晰 */}
+      <body className="text-gray-900 min-h-screen">
+        {/* 背景图片轮播 - 自动扫描 public/bg 目录 */}
+        <BackgroundCarousel
+          images={images}
+          interval={15000}
+        />
+
         <div className="min-h-screen bg-black/30">
           <nav className="bg-black/40 backdrop-blur-sm border-b border-white/10">
             <div className="max-w-4xl mx-auto px-4 py-4">
