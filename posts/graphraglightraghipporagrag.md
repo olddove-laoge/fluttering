@@ -4,6 +4,7 @@ date: '2026-04-18'
 tags:
   - RAG
   - 知识图谱
+  - Agent
 excerpt: 在准备AIGC比赛项目过程中，所了解到的三种知识图谱RAG，三者各有优劣，在这里写一下三者各自的机制
 ---
 ## GraphRAG
