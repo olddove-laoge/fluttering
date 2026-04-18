@@ -63,11 +63,7 @@ export default function RootLayout({
                     <img
                       src="https://github.com/olddove-laoge.png"
                       alt="GitHub"
-                      className="w-9 h-9 rounded-full border-2 border-white/30 hover:border-white/80 transition-colors"
-                      onError={(e) => {
-                        // 如果加载失败，使用默认 GitHub 图标
-                        (e.target as HTMLImageElement).src = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
-                      }}
+                      className="w-9 h-9 rounded-full border-2 border-white/30 hover:border-white/80 transition-colors bg-gray-800"
                     />
                   </a>
                 </div>
