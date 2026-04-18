@@ -33,6 +33,10 @@ export function getAllPosts(): Post[] {
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data, content } = matter(fileContents);
 
+      // 获取文件修改时间（用于相同日期的排序）
+      const stats = fs.statSync(fullPath);
+      const modifiedTime = stats.mtime.getTime();
+
       // 计算阅读时间（假设每分钟阅读 200 字）
       const wordCount = content.replace(/\s/g, '').length;
       const readingTime = Math.ceil(wordCount / 200);
@@ -45,9 +49,16 @@ export function getAllPosts(): Post[] {
         content,
         tags: data.tags || [],
         readingTime,
+        modifiedTime,
       };
     })
-    .sort((a, b) => (new Date(b.date) as any) - (new Date(a.date) as any));
+    .sort((a: any, b: any) => {
+      // 首先按日期排序
+      const dateDiff = new Date(b.date).getTime() - new Date(a.date).getTime();
+      if (dateDiff !== 0) return dateDiff;
+      // 日期相同则按文件修改时间排序（新的在前）
+      return b.modifiedTime - a.modifiedTime;
+    });
 
   return allPosts;
 }
