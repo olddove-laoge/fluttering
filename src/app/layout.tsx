@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import 'katex/dist/katex.min.css';
 import './globals.css';
 import BackgroundCarousel from '@/components/BackgroundCarousel';
 import ConstellationTrail from '@/components/ConstellationTrail';
