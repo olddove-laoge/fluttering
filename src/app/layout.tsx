@@ -34,7 +34,7 @@ export default async function RootLayout({
 
         <div className="min-h-screen bg-black/30">
           <nav className="bg-black/40 backdrop-blur-sm border-b border-white/10">
-            <div className="max-w-4xl mx-auto px-4 py-4">
+            <div className="max-w-7xl mx-auto px-6 py-4">
               <div className="flex items-center justify-between">
                 {/* 左侧：头像 + 标题 */}
                 <a href="/" className="flex items-center gap-3 group">
@@ -76,12 +76,12 @@ export default async function RootLayout({
             </div>
           </nav>
 
-          <main className="max-w-4xl mx-auto px-4 py-8">
+          <main className="max-w-7xl mx-auto px-6 py-8">
             {children}
           </main>
 
           <footer className="border-t border-white/10 mt-16 py-8 bg-black/20">
-            <div className="max-w-4xl mx-auto px-4 text-center text-white/50">
+            <div className="max-w-7xl mx-auto px-6 text-center text-white/50">
               <p>Built with Next.js & Markdown</p>
             </div>
           </footer>
