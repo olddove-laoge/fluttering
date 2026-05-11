@@ -21,7 +21,7 @@ const contentOffsets = [-8, 10, -4, 12, -10, 6, -6, 8];
 export default function StarTimeline({ posts }: StarTimelineProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const starRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const articleRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const articleRefs = useRef<Record<string, HTMLElement | null>>({});
   const [points, setPoints] = useState<Point[]>([]);
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
@@ -149,7 +149,7 @@ export default function StarTimeline({ posts }: StarTimelineProps) {
               return (
                 <article
                   key={post.slug}
-                  ref={(el) => {
+                  ref={(el: HTMLElement | null) => {
                     articleRefs.current[post.slug] = el;
                   }}
                   className={`relative grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-10 items-center scroll-mt-24 transition-all duration-500 ${
