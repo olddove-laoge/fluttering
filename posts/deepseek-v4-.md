@@ -4,10 +4,11 @@ date: '2026-05-11'
 tags:
   - LLM
   - 笔记
+  - 长期更新
 excerpt: 阅读DeepSeekV4论文的思考与笔记，长期更新
 ---
 大致阅览了一下, DeepSeekV4的核心创新主要是以下几个部分：CSA,HCA,mHC以及Muon。其中, CSA和HCA都属于注意力机制变体，起到通过压缩KV cache提高长上下文能力的作用，mHC是一种残差连接变体，比普通残差更能连接上下文。Muon我还没看。
-##总体架构
+## 总体架构
 ![image](/images/posts/1778545767059-zn1wf0.png)
 这张图是DeepseekV4的核心流程图，我简单口述下具体是个什么流程
 首先，将用户输入Input Tokens转化为词向量Embedding,先进行一个块前混合，交给CSA/HCA的混合注意力机制架构，再块前混合后与原Embedding残差混合，下一步和上述过程差不多，只不过交给了MoE而已，DeeepSeekMoE是沿用的v3的技术，就不多赘述了
