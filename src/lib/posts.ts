@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 import remarkMath from 'remark-math';
 import remarkRehype from 'remark-rehype';
 import rehypeKatex from 'rehype-katex';
@@ -78,6 +79,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
   const processedContent = await remark()
     .use(remarkGfm)
+    .use(remarkBreaks)
     .use(remarkMath)
     .use(remarkRehype)
     .use(rehypeKatex)

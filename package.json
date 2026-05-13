@@ -18,6 +18,7 @@
     "rehype-katex": "^7.0.1",
     "rehype-stringify": "^10.0.1",
     "remark": "^15.0.0",
+    "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.0",
     "remark-html": "^16.0.0",
     "remark-math": "^6.0.0",
