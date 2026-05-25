@@ -4,6 +4,7 @@ import { zhCN } from 'date-fns/locale';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Giscus from '@/components/Giscus';
+import PostToc from '@/components/PostToc';
 
 interface Props {
   params: { slug: string };
@@ -33,7 +34,9 @@ export default async function PostPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-white/95 backdrop-blur-sm rounded-lg p-8">
+    <div className="flex gap-4 xl:gap-6 items-start">
+      <PostToc headings={post.headings || []} />
+      <div className="bg-white/95 backdrop-blur-sm rounded-lg p-8 flex-1 min-w-0">
       <article>
         <header className="mb-8">
           <Link
@@ -75,6 +78,7 @@ export default async function PostPage({ params }: Props) {
           <Giscus />
         </div>
       </article>
+      </div>
     </div>
   );
 }

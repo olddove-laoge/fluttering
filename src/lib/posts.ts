@@ -11,6 +11,31 @@ import rehypeStringify from 'rehype-stringify';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
+function slugifyHeading(text: string): string {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/[\s]+/g, '-')
+    .replace(/[^\w一-龥-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'section';
+}
+
+function extractText(node: any): string {
+  if (!node) return '';
+  if (node.type === 'text') return node.value || '';
+  if (Array.isArray(node.children)) {
+    return node.children.map((child: any) => extractText(child)).join('');
+  }
+  return '';
+}
+
+export interface PostHeading {
+  id: string;
+  text: string;
+  level: number;
+}
+
 export interface Post {
   slug: string;
   title: string;
@@ -20,6 +45,7 @@ export interface Post {
   tags: string[];
   readingTime: number;
   views?: number;
+  headings?: PostHeading[];
 }
 
 export function getAllPosts(): Post[] {
@@ -77,10 +103,40 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
 
+  const headings: PostHeading[] = [];
+  const slugCount = new Map<string, number>();
+
   const processedContent = await remark()
     .use(remarkGfm)
     .use(remarkBreaks)
     .use(remarkMath)
+    .use(() => (tree: any) => {
+      const walk = (node: any) => {
+        if (!node) return;
+
+        if (node.type === 'heading' && (node.depth === 2 || node.depth === 3)) {
+          const text = extractText(node).trim();
+          if (text) {
+            const base = slugifyHeading(text);
+            const used = slugCount.get(base) || 0;
+            const id = used === 0 ? base : `${base}-${used + 1}`;
+            slugCount.set(base, used + 1);
+
+            node.data = node.data || {};
+            node.data.hProperties = node.data.hProperties || {};
+            node.data.hProperties.id = id;
+
+            headings.push({ id, text, level: node.depth });
+          }
+        }
+
+        if (Array.isArray(node.children)) {
+          node.children.forEach((child: any) => walk(child));
+        }
+      };
+
+      walk(tree);
+    })
     .use(remarkRehype)
     .use(rehypeKatex)
     .use(rehypeStringify)
@@ -98,6 +154,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     content: contentHtml,
     tags: data.tags || [],
     readingTime,
+    headings,
   };
 }
 
