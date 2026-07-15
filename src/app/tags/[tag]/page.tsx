@@ -10,9 +10,8 @@ interface Props {
 
 export async function generateStaticParams() {
   const tags = getAllTags();
-  // Static export matches the encoded URL segment emitted by tag links.
   return tags.map((tag) => ({
-    tag: encodeURIComponent(tag),
+    tag,
   }));
 }
 
@@ -52,7 +51,7 @@ export default function TagPage({ params }: Props) {
             {tags.map((t) => (
               <Link
                 key={t}
-                href={`/tags/${encodeURIComponent(t)}`}
+                href={`/tags/${t}`}
                 className={`px-3 py-1.5 rounded-full text-sm transition-colors border ${
                   t === tag
                     ? 'bg-blue-400/20 border-blue-300/40 text-blue-100'
@@ -96,7 +95,7 @@ export default function TagPage({ params }: Props) {
                         {post.tags.map((t) => (
                           <Link
                             key={t}
-                            href={`/tags/${encodeURIComponent(t)}`}
+                            href={`/tags/${t}`}
                             className={`px-2.5 py-1 rounded-full border text-xs transition-colors ${
                               t === tag
                                 ? 'bg-blue-400/20 border-blue-300/40 text-blue-100'

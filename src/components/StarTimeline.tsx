@@ -189,7 +189,7 @@ export default function StarTimeline({ posts }: StarTimelineProps) {
                         {post.tags.slice(0, 4).map((tag) => (
                           <Link
                             key={tag}
-                            href={`/tags/${encodeURIComponent(tag)}`}
+                            href={`/tags/${tag}`}
                             className="px-2.5 py-1 rounded-full border border-white/20 text-white/75 text-xs hover:border-white/40 hover:text-white transition-colors"
                           >
                             {tag}

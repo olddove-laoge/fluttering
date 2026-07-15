@@ -21,7 +21,7 @@ export default function TagsPage() {
             {tags.map((tag) => (
               <Link
                 key={tag}
-                href={`/tags/${encodeURIComponent(tag)}`}
+                href={`/tags/${tag}`}
                 className="px-3 py-1.5 rounded-full border border-white/20 text-white/80 text-sm hover:border-white/40 hover:text-white transition-colors"
               >
                 {tag}
@@ -61,7 +61,7 @@ export default function TagsPage() {
                         {post.tags.map((tag) => (
                           <Link
                             key={tag}
-                            href={`/tags/${encodeURIComponent(tag)}`}
+                            href={`/tags/${tag}`}
                             className="px-2.5 py-1 rounded-full border border-white/20 text-white/70 text-xs hover:border-white/40 hover:text-white transition-colors"
                           >
                             #{tag}
