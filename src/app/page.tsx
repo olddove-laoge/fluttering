@@ -8,7 +8,7 @@ export default function Home() {
     <div className="space-y-8 md:space-y-10">
       <section className="text-center pt-2">
         <h1 className="text-4xl md:text-5xl font-semibold text-white drop-shadow-lg">振翅</h1>
-        <p className="mt-3 text-white/80">沿着一条纵向星轨，记录每篇文章的诞生。</p>
+        <p className="mt-3 text-white/80">致力成为AI全栈大师(bushi。</p>
       </section>
 
       {posts.length === 0 ? (
