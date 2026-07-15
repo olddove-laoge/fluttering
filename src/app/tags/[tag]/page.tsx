@@ -10,6 +10,7 @@ interface Props {
 
 export async function generateStaticParams() {
   const tags = getAllTags();
+  // Static export matches the encoded URL segment emitted by tag links.
   return tags.map((tag) => ({
     tag: encodeURIComponent(tag),
   }));
