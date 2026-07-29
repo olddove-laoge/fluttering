@@ -136,5 +136,74 @@ r - 1 - \log r \ge 0
 $$
 
 所以每个样本的估计值都是非负的。
-## 参考文献
-https://qizishi.github.io/Autumn-Recruitment-Tutorials-for-LLM/tutorials/kl_divergence_rlhf_tutorial.html
+
+## KL 在 RLHF 中的两种放置
+哎我操写博客怎么这么累，写完这章我就润
+KL散度作为评估训练模型与SFT模型偏差的惩罚，一般有两种放置方法一种是把 KL 放进 reward 里，作为 reward penalty；另一种把 KL 放进 policy loss 里，作为显式正则项。从数学角度上看，两者似乎是等价的，都是在最优化$ J(\pi) = \mathbb{E}_\pi[R] - \beta \cdot \text{KL}(\pi \| \pi_{\text{ref}}) $ 这个目标。但是从工程角度看，两种放置选择其实是有差别的。
+
+### Option A：In-reward shaping
+这是 RLHF/PPO 中最常见的实现方式之一。
+它会直接进入奖励函数中，作为对每个token的负奖励参与进评分中，最后再随着advantage进入PPO以及后续的流程当中。
+这样的好处是:critic 评估的是“扣掉 KL 之后的价值”与PPO 的 actor-critic 框架比较一致.
+这里的“这和 PPO 的 actor-critic 框架比较一致”指的是：
+critic 预测的东西，正好就是 actor 用来更新策略的东西。
+更具体说：
+KL 放进 reward 后：
+reward = reward_model_score - β KL
+那么 PPO 里：
+critic 学：V(s_t) ≈ 未来累计的 reward
+actor 用：A_t = return_t - V(s_t)
+由于 return_t 也是由这个 reward 算出来的，所以二者都是围绕：
+reward_model_score - β KL
+这个目标。
+举个极简例子。
+假设有两个回答：
+A: reward_model_score = 8, KL cost = 1
+B: reward_model_score = 10, KL cost = 5
+如果 β = 1，那么扣 KL 后：
+A: 8 - 1 = 7
+B: 10 - 5 = 5
+如果 KL 放进 reward，那么 critic 会学：
+V(A) ≈ 7
+V(B) ≈ 5
+actor 更新时也会认为：
+A 更好，因为扣 KL 后收益更高
+所以 actor 和 critic 的判断一致。
+如果 KL 不放进 reward，而是单独放进 loss，那么 critic 可能学的是纯 reward model 分数：
+V(A) ≈ 8
+V(B) ≈ 10
+critic 会觉得 B 更好。
+但 actor 的总目标其实是：
+reward_model_score - β KL
+所以 actor 又会被 KL loss 拉回来，觉得 B 不一定好。
+于是变成：
+critic: B 好，因为 RM 分数高
+actor: B 不一定好，因为 KL 太大
+这就是“不那么一致”。
+而这种放置方法的缺点如下
+1. 直接梯度影响被抹消
+当KL 放进 reward 里时，就变成了一个扣分的"数字"，而不是“直接拉住模型参数的正则项”。
+这么说可能有些抽象，我换个更通俗的方式讲解。
+KL作为reward的惩罚项参与进奖励函数后，最终奖励函数得到的是一个经过评分与惩罚之后的数字。此时再进行梯度计算和反向传播后。KL惩罚的影响就被模糊了，就类比
+KL 放进 reward 里像是老师给成绩单：
+原始分数 90
+作弊扣分 10
+最终分数 80
+你之后学习时只看到：
+这次答案最终得了 80 分
+你知道这个答案整体没那么好，但扣分已经是历史记录里的一个数字。无法判断扣分原因，只知道避免再次这样回答。
+好吧这个讲解还是有些抽象,将就看吧(
+但值得注意的是，虽然KL的直接梯度影响被抹消了，但正如上面说的:"只知道避免再次这样回答。",KL散度通过惩罚降低token得分，使其再次生成的概率下降。其对模型训练的帮助还是在的。
+2. 和 PPO clipping 交互后不再完全等价
+PPO clipping 的作用是：如果当前策略相对 old policy 变化太大，就把更新截断。
+当 KL 放进 reward 里，KL penalty 会影响得分，然后进入 PPO clipped。
+也就是说，KL 的影响要经过 PPO 的 clipping。如果某个 token KL 很大，导致得分很低，理论上应该强烈降低它的概率。但如果其变化已经超出 clip 范围，PPO 可能会截断这部分更新。所以 KL 惩罚的作用会被 PPO clipping 限制。
+3. value model 会被 KL 影响
+RLHF PPO 里通常有两个模型头：
+policy head: 负责生成 token
+value head: 负责预测当前状态未来能拿多少 reward
+在RLHF中，value model（或称critic）学习的是从状态\(s_t\)开始的未来累积奖励的期望，而当KL散度惩罚被直接纳入奖励函数后，奖励变为`reward_model_score - β * KL`，因此value model所估计的价值\(V(s_t)\)也就相应地变成了“未来能获得的、扣除KL惩罚后的人类偏好分数”，而非纯粹的原始人类偏好奖励。例如，若回答A平实安全，原始reward为6但KL惩罚仅0.5，则penalized reward为5.5；而回答B极度讨好，原始reward高达9但KL惩罚为4，则penalized reward仅为5——此时value model会认为A的价值（5.5）高于B（5），而非原始reward所显示的A（6）低于B（9）。这种设计本身契合RLHF的核心目标：在追求高人类偏好的同时约束模型不偏离参考策略，所以critic给出的混合信号通常是合理的。然而，这同时也构成一个缺点：由于KL成本与偏好奖励被揉合在一起，value model无法单独揭示“该状态在纯粹人类偏好上的真实价值”或“该状态与参考模型的偏离程度”，它只能给出一个整体划不划算的综合评分，这使得我们在进行策略分析、超参数调试或诊断模型行为时，难以拆解出各个因素的独立影响，增加了理解和优化的难度。
+
+### Option B：In-loss regularization
+两种方法的优劣基本上是反过来的，就不多赘述(其实是我懒得写了喵)
+下次补充三种估计器和两种放置方式分别什么时候使用
