@@ -82,3 +82,7 @@ Q = 模型分布
 那么两种KL计算方式分别适用于什么场景呢
 我们已经知道Forward KL适合全面覆盖，那么监督微调，模型蒸馏等就是Forward KL发挥的绝佳场景了。至于Reverse KL，在RLHF（基于人类反馈的强化学习）中，我们既要优化奖励，又要让新策略Q不偏离参考策略P太远。使用Reverse KL能确保模型不会探索到P认为极不可能（质量差）的区域，从而保证生成内容的稳定性和质量。
 两种KL就讲完了
+
+
+## 参考文献
+https://qizishi.github.io/Autumn-Recruitment-Tutorials-for-LLM/tutorials/kl_divergence_rlhf_tutorial.html
