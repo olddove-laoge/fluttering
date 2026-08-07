@@ -130,8 +130,7 @@ LightRAG 的检索机制采用了**双层并行检索策略**，旨在同时兼�
 相比GraphRAG，LightRAG的名字已经点出了它的优势，更加轻量化，并且增量更新更方便
 劣势的话，大概是更加依赖模型能力？
 
-## HippoRAG
-我快写不动了，这段交给gemini写吧 好累
+
 ## HippoRAG
 
 HippoRAG 是一种受人类大脑海马体（Hippocampus）记忆机制启发的检索增强生成（RAG）框架。它旨在解决传统 RAG 在处理**跨文档多跳推理**（Multi-hop Reasoning）时的局限性。通过模拟大脑的联想记忆功能，HippoRAG 能够连接分布在不同文档中的碎片化信息，构建出完整的逻辑证据链。
